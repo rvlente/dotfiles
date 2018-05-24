@@ -1,0 +1,131 @@
+# i3 config file (v4)
+#
+# Please see https://i3wm.org/docs/userguide.html for a complete reference!
+
+set $mod Mod4
+bindsym $mod+F5 restart
+
+
+# WINDOWS #
+#=========#
+
+# kill window
+bindsym $mod+BackSpace kill
+
+# change focus
+focus_follows_mouse no
+bindsym $mod+Left  focus left
+bindsym $mod+Right focus right
+bindsym $mod+Up    focus up
+bindsym $mod+Down  focus down
+bindsym $mod+Next  focus child
+bindsym $mod+Prior focus parent
+
+# move window
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+Up    move up
+bindsym $mod+Shift+Down  move down
+
+# resize window
+bindsym $mod+Ctrl+Left  resize shrink width  10 px
+bindsym $mod+Ctrl+Right resize grow   width  10 px
+bindsym $mod+Ctrl+Up    resize shrink height 10 px
+bindsym $mod+Ctrl+Down  resize grow   height 10 px
+
+# split
+bindsym $mod+v split v
+bindsym $mod+h split h
+
+# floating
+floating_modifier $mod
+bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+space floating toggle
+
+# fullscreen
+bindsym $mod+Ctrl+Shift+space fullscreen toggle
+
+
+# WORKSPACES #
+#============#
+
+# focus workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+
+# move window to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+
+
+# SYSTEM CONTROL #
+#================#
+
+# volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 2%+ unmute
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 2%- unmute
+
+# media
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioStop exec --no-startup-id playerctl stop
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+
+
+# APPEARANCE #
+#============#
+
+font pango: Consolas 10.5
+
+# gaps
+gaps inner 12
+#gaps outer 4
+
+# default window border
+for_window [class="^.*"] border pixel 2
+
+# colors                border  backgr. text    indicator child_border
+client.focused          #373b41 #373b41 #b4b7b4 #81a2be   #81a2be
+client.focused_inactive #373b41 #373b41 #b4b7b4 #373b41   #373b41
+client.unfocused        #373b41 #373b41 #b4b7b4 #373b41   #373b41
+client.urgent           #373b41 #373b41 #b4b7b4 #cc6666   #cc6666
+client.placeholder      #373b41 #373b41 #b4b7b4 #373b41   #373b41
+
+client.background       #ffffff
+
+
+# APPLICATIONS #
+#==============#
+
+# rofi
+bindsym $mod+Return exec --no-startup-id rofi -show drun -show-icons &
+
+# termite
+bindsym $mod+t exec --no-startup-id termite &
+
+# thunar
+bindsym $mod+f exec --no-startup-id thunar &
+
+# firefox
+bindsym $mod+w exec --no-startup-id firefox &
+
+# firefox private
+bindsym $mod+e exec --no-startup-id firefox --private-window &
+
+# runelite
+for_window [class="net-runelite-launcher-Launcher"] floating enable
+
+
+# STARTUP #
+#=========#
+
+exec --no-startup-id feh --bg-scale ~/.config/i3/wallpaper
+exec --no-startup-id compton -b
+exec_always --no-startup-id ~/.config/i3/bar/launch.sh &
+exec --no-startup-id xinput --set-prop 8 'libinput Accel Speed' -0.7

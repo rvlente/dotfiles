@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+
+hc() { herbstclient "$@" }
+
+hc lock
+hc emit_hook reload
+hc keyunbind --all
+hc mouseunbind --all
+
+# KEYBINDS
+#==========
+
+# reload
+hc keybind $Mod-Shift-r reload
+
+# kill
+hc keybind $Mod-Escape       close_or_remove
+hc keybind $Mod-Shift-Escape close_and_removeg
+
+# focus
+hc keybind $Mod-Left  focus left
+hc keybind $Mod-Right focus right
+hc keybind $Mod-Up    focus up
+hc keybind $Mod-Down  focus down
+
+# move
+hc keybind $Mod-Shift-Left  shift left
+hc keybind $Mod-Shift-Right shift right
+hc keybind $Mod-Shift-Up    shift up
+hc keybind $Mod-Shift-Down  shift down
+
+# layouts
+hc keybind $Mod-Control-a set_layout vertical
+hc keybind $Mod-Control-s set_layout horizontal
+hc keybind $Mod-Control-d set_layout max
+hc keybind $Mod-Control-f set_layout grid
+
+# split
+hc keybind $Mod-z split bottom 0.5
+hc keybind $Mod-c split right  0.5
+hc keybind $Mod-x split explode
+
+# resize
+hc keybind $Mod-Control-Left  resize left  0.05
+hc keybind $Mod-Control-Right resize right 0.05
+hc keybind $Mod-Control-Up    resize up    0.05
+hc keybind $Mod-Control-Down  resize down  0.05
+
+# WORKSPACES 
+#============
+
+hc rename default 1
+for i in $(seq 1 5); do
+    hc add "$i"
+    hc keybind "$Mod-$i" use "$i"
+    hc keybind "$Mod-Shift-$i" move "$i"
+done
+
+# LAYOUTS
+#=========
+
+single="(split horizontal:0.8:0 (split horizontal:0.25:1 (clients vertical:0) (clients max:0)) (clients vertical:0))"
+double="(split horizontal:0.5:0 (clients max:0) (clients max:0))"
+triple="(split horizontal:0.667:0 (split horizontal:0.5:0 (clients max:0) (clients max:0)) (clients max:0))"
+split="(split horizontal:0.5:0 (clients max:0) (split vertical:0.5:0 (clients max:0) (clients horizontal:0)))"
+
+# default layouts
+hc load 1 "$single"
+
+hc keybind $Mod-F1 load "$single"
+hc keybind $Mod-F2 load "$double"
+hc keybind $Mod-F3 load "$triple"
+hc keybind $Mod-F4 load "$split"
+
+# APPLICATIONS
+#==============
+
+hc keybind $Mod-t spawn konsole
+hc keybind $Mod-w spawn firefox
+
+# THEME
+#=======
+
+border_outer_color='#101010'
+border_active_color='#16A085'
+border_normal_color='#454545'
+
+hc set smart_frame_surroundings 0
+hc set always_show_frame 0
+hc set frame_gap 8
+hc set frame_padding 0
+hc set frame_border_width 1
+hc set frame_border_inner_width 0
+hc set frame_bg_transparent 1
+hc set frame_transparent_width 0
+hc set frame_bg_active_color "$border_active_color"
+hc set frame_bg_normal_color "$border_normal_color"
+hc set frame_border_active_color "$border_outer_color"
+hc set frame_border_normal_color "$border_outer_color"
+
+hc set smart_window_surroundings 0
+hc set window_gap 0
+hc set window_border_width 4
+hc set window_border_inner_width 1
+hc set window_border_active_color "$border_active_color"
+hc set window_border_normal_color "$border_normal_color"
+hc set window_border_inner_color  "$border_outer_color"
+
+# RULES
+#=======
+
+hc unrule -F
+hc rule focus=on
+hc rule windowtype='_NET_WM_WINDOW_TYPE_DOCK' manage=off
+hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' pseudotile=on
+hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
+
+# STARTUP
+#=========
+
+hc spawn feh --bg-scale Pictures/mountains.png
+hc spawn compton -b
+
+
+# unlock
+hc unlock
